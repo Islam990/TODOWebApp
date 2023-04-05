@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 public class TODOService {
 
-    private static List<TODO> todos = new ArrayList<>();
+    private static final List<TODO> todos = new ArrayList<>();
     private static int count = 0;
 
     static {
@@ -26,4 +26,7 @@ public class TODOService {
         todos.add(new TODO(++count, name, description, targetDate, IsDone));
     }
 
+    public void delete(int id) {
+        todos.removeIf(todo -> todo.getId() == id);
+    }
 }

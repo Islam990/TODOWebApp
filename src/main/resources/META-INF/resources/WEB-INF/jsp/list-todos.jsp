@@ -15,6 +15,7 @@
                     <th>Description</th>
                     <th>Target Data</th>
                     <th>Is Done?</th>
+                    <th></th>
                 </tr>
                 </thead>
                 <c:forEach items="${todos}" var="todo">
@@ -23,6 +24,7 @@
                         <th>${todo.description}</th>
                         <th>${todo.targetDate}</th>
                         <th>${todo.done}</th>
+                        <th><a href="delete-page?id=${todo.id}" class="btn btn-danger">DELETE</a></th>
                     </tr>
                 </c:forEach>
             </table>

@@ -6,10 +6,7 @@ import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -46,7 +43,7 @@ public class TODOController {
     @RequestMapping(value = "add-todo", method = RequestMethod.POST)
     public String addTodo(ModelMap model, @Valid @ModelAttribute("todo") TODO todo, BindingResult bindingResult) {
 
-        if(bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             return "add-todo";
         }
 
@@ -54,6 +51,12 @@ public class TODOController {
                 todo.getDescription(),
                 LocalDate.now().minusDays(5),
                 false);
+        return "redirect:list-todos";
+    }
+
+    @RequestMapping("delete-page")
+    public String deleteTodo(@RequestParam int id) {
+        todoService.delete(id);
         return "redirect:list-todos";
     }
 }
