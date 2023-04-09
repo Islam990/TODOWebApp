@@ -1,11 +1,22 @@
 package com.islamgad.springboot.todowebapp.data;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
 
+@Entity
 public class TODO {
 
+
+    public TODO() {
+
+    }
+
+    @Id
+    @GeneratedValue
     private int id;
     private String name;
     @Size(min = 10, message = "Enter At Least 10 Characters")

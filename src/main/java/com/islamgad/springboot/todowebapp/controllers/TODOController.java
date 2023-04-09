@@ -1,6 +1,7 @@
 package com.islamgad.springboot.todowebapp.controllers;
 
 import com.islamgad.springboot.todowebapp.data.TODO;
+import com.islamgad.springboot.todowebapp.data.TODORepository;
 import com.islamgad.springboot.todowebapp.services.TODOService;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
@@ -16,14 +17,16 @@ import java.util.List;
 public class TODOController {
 
     private final TODOService todoService;
+    private final TODORepository todoRepository;
 
-    public TODOController(TODOService todoService) {
+    public TODOController(TODOService todoService, TODORepository todoRepository) {
         this.todoService = todoService;
+        this.todoRepository = todoRepository;
     }
 
     @RequestMapping("list-todos")
     public String listAllTodos(ModelMap model) {
-        List<TODO> todos = todoService.getTODOByName(WelcomeController.getUserLogging());
+        List<TODO> todos = todoRepository.getTodosByName(WelcomeController.getUserLogging());
         model.addAttribute("todos", todos);
         return "list-todos";
     }
@@ -47,22 +50,21 @@ public class TODOController {
             return "add-todo";
         }
 
-        todoService.addTodo(WelcomeController.getUserLogging(),
-                todo.getDescription(),
-                todo.getTargetDate(),
-                false);
+        todo.setName(WelcomeController.getUserLogging());
+        todoRepository.save(todo);
+
         return "redirect:list-todos";
     }
 
     @RequestMapping("delete-page")
     public String deleteTodo(@RequestParam int id) {
-        todoService.delete(id);
+        todoRepository.deleteById(id);
         return "redirect:list-todos";
     }
 
     @RequestMapping(value = "update-page", method = RequestMethod.GET)
     public String updateTodo(@RequestParam int id, ModelMap modelMap) {
-        modelMap.addAttribute("todo", todoService.getTodoByID(id));
+        modelMap.addAttribute("todo", todoRepository.findById(id).get());
         return "add-todo";
     }
 
@@ -74,7 +76,7 @@ public class TODOController {
         }
 
         todo.setName((String) model.get("name"));
-        todoService.updateTodo(todo);
+        todoRepository.save(todo);
         return "redirect:list-todos";
     }
 }
